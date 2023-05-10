@@ -1,0 +1,24 @@
+version: '3.8' 
+services:   
+  web:
+    build: ./
+    command: ./botVK
+    ports:
+      - 80:8080
+    depends_on:
+      - db
+    environment:
+      - HOST=host=host.docker.internal
+
+  db:
+    container_name: pg
+    image: postgres:15.2
+    restart: always
+    environment:
+      - POSTGRES_DB=VK_Database
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+    volumes:
+      - ./migrations/000001_create_quotes.up.sql:/docker-entrypoint-initdb.d/000001_create_quotes.up.sql
+    ports:
+      - "5432:5432"
